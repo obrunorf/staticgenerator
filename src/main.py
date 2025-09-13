@@ -1,7 +1,7 @@
 from textnode import *
 
 def main():
-    nodulo = TextNode("Galo Doido", TextType.LINK, 'https://www.boot.dev')
+    nodulo = TextNode("Pokedex", TextType.LINK, 'https://pokedex-5e.herokuapp.com')
     print(nodulo)
 
 main()
