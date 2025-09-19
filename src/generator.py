@@ -12,13 +12,13 @@ def copy_contents_recursively(origin, destination):
     #welp, thats self explanatory no?
     shutil.copytree(origin, destination, dirs_exist_ok=True)
     
-def prepare_directory(origin, destination):
+def prepare_directory(static, destination):
     script_path = Path(__file__).resolve()
     parent_directory = script_path.parent.parent
     target = os.path.join(parent_directory,destination)
-    origin = os.path.join(parent_directory,origin)
+    origin = os.path.join(parent_directory,static)
     delete_dest(target)
-    copy_contents_recursively(origin,target)
+    copy_contents_recursively(static,target)
     
 def extract_title(markdown):
     import re
