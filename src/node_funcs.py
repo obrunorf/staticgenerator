@@ -30,7 +30,7 @@ def text_node_to_html_node(text_node):
         if tag == 'a':
             return LeafNode(tag=tag, value=text_node.text, props={'href':text_node.url})
         if tag == 'img':
-            return LeafNode(tag=tag, value='', props={'src': text_node.url,
+            return LeafNode(tag=tag, value="", props={'src': text_node.url,
                     'alt': text_node.text})
         return LeafNode(tag=tag, value=text_node.text)
     
@@ -136,14 +136,13 @@ def markdown_to_blocks(markdown):
     blocks = markdown.split('\n\n')
     processed_blocks =[]
     for block in blocks:
-        #s = block.replace('\n',' ')
         s = block.strip()
         if len(s) > 0 :
             processed_blocks.append(s)
     return processed_blocks
 
 def text_to_html_node(text):
-    nodes =  text_to_textnodes(text)
+    nodes = text_to_textnodes(text)
     htmls = []
     for node in nodes:
         htmls.append(text_node_to_html_node(node))
