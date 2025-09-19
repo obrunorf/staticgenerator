@@ -12,11 +12,11 @@ def copy_contents_recursively(origin, destination):
     #welp, thats self explanatory no?
     shutil.copytree(origin, destination, dirs_exist_ok=True)
     
-def prepare_directory():
+def prepare_directory(origin, destination):
     script_path = Path(__file__).resolve()
     parent_directory = script_path.parent.parent
-    target = os.path.join(parent_directory,'public')
-    origin = os.path.join(parent_directory,'static')
+    target = os.path.join(parent_directory,destination)
+    origin = os.path.join(parent_directory,origin)
     delete_dest(target)
     copy_contents_recursively(origin,target)
     
@@ -34,7 +34,7 @@ def get_content(filepath):
     file.close()
     return content
 
-def generate_page(from_path, template_path, dest_path):
+def generate_page(from_path, template_path, dest_path, basepath):
     from blocks import markdown_to_html_node
     print(f'Generating page from {from_path} to {dest_path} using {template_path}')
     content = get_content(from_path)
@@ -43,6 +43,8 @@ def generate_page(from_path, template_path, dest_path):
     processed_content = processed_content.to_html()
     title = extract_title(content)
     html_content = template.replace(r'{{ Title }}',title).replace(r'{{ Content }}', processed_content)
+    html_content = html_content.replace('href="/', f'href="{basepath}')
+    html_content = html_content.replace('src="/', f'src="{basepath}')
     
     from pathlib import Path
     output_file = Path(dest_path)
@@ -50,13 +52,13 @@ def generate_page(from_path, template_path, dest_path):
     with open(output_file, 'w') as file:
         file.write(html_content)
         
-def generate_pages_recursive(dir_path_content, template_path, dest_dir_path):
+def generate_pages_recursive(dir_path_content, template_path, dest_dir_path, basepath):
     files = get_files_recursive(dir_path_content)
     for file in files:
         if file.endswith('.md'):
             gen_path = file.replace(dir_path_content,dest_dir_path).replace('.md','.html')
-            print(gen_path)
-            generate_page(file,template_path,gen_path)
+            #print(gen_path)
+            generate_page(file,template_path,gen_path,basepath)
             
 
 def get_files_recursive(path='content/'):
